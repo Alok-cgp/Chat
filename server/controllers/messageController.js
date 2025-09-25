@@ -1,7 +1,6 @@
 import Message from "../models/message.js";
 import User from "../models/User.js";
 import cloudinary from "../lib/cloudinary.js";
-import {io, userSocketMap} from '../server.js'
 
 export const getUsersForSidebar = async (req,res)=>{
     try {
@@ -76,10 +75,11 @@ export const sendMessages = async (req,res)=>{
             image: imageUrl
         })
 
-        const receiverSocketId = userSocketMap[receiverId];
-        if(receiverSocketId){
-            io.to(receiverSocketId).emit("newMessage", newMessage)
-        }
+        // Socket.IO disabled for Vercel serverless
+        // const receiverSocketId = userSocketMap[receiverId];
+        // if(receiverSocketId){
+        //     io.to(receiverSocketId).emit("newMessage", newMessage)
+        // }
 
         res.json({success: true, newMessage});
     } catch (error) {
